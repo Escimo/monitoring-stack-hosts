@@ -1,0 +1,32 @@
+---
+# tasks/main.yml for cAdvisor
+
+# Make sure Docker is installed on the target host, e.g.:
+- name: Ensure Docker is installed (example)
+  ansible.builtin.package:
+    name: docker
+    state: present
+  # This is just an example. In production, you might have a dedicated role to install Docker.
+
+- name: Pull cAdvisor image
+  community.docker.docker_image:
+    name: "gcr.io/cadvisor/cadvisor{{ cadvisor_version }}"
+    source: pull
+
+- name: Run cAdvisor container
+  community.docker.docker_container:
+    name: cadvisor
+    image: "gcr.io/cadvisor/cadvisor{{ cadvisor_version }}"
+    state: started
+    restart_policy: always
+    privileged: yes
+    published_ports:
+      - "8080:8080"
+    volumes:
+      - "/:/rootfs:ro"
+      - "/var/run:/var/run:rw"
+      - "/sys:/sys:ro"
+      - "/var/lib/docker:/var/lib/docker:ro"
+      - "/dev/disk:/dev/disk:ro"
+    devices:
+      - "/dev/kmsg:/dev/kmsg"

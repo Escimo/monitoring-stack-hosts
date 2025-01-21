@@ -1,0 +1,13 @@
+---
+# This playbook targets all hosts in your inventory, 
+# elevates privileges to root, and applies all four roles in sequence.
+- name: Install and configure Prometheus exporters
+  hosts: all
+  become: yes  # run tasks with root privileges
+  gather_facts: yes
+
+  roles:
+    - node_exporter
+    - mysqld_exporter
+    - blackbox_exporter
+    - cadvisor

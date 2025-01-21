@@ -1,0 +1,53 @@
+---
+# tasks/main.yml for blackbox_exporter
+- name: Create blackbox_exporter user
+  ansible.builtin.user:
+    name: blackbox_exporter
+    shell: /usr/sbin/nologin
+    system: yes
+
+- name: Download blackbox_exporter archive
+  ansible.builtin.get_url:
+    url: "https://github.com/prometheus/blackbox_exporter/releases/download/v{{ blackbox_exporter_version }}/blackbox_exporter-{{ blackbox_exporter_version }}.{{ arch }}.tar.gz"
+    dest: "/tmp/blackbox_exporter.tar.gz"
+    mode: '0644'
+
+- name: Unarchive blackbox_exporter
+  ansible.builtin.unarchive:
+    src: "/tmp/blackbox_exporter.tar.gz"
+    dest: "/usr/local/bin/"
+    remote_src: yes
+    extra_opts: [ "--strip-components=1" ]
+    creates: "/usr/local/bin/blackbox_exporter"
+
+- name: Create directory for blackbox_exporter config
+  ansible.builtin.file:
+    path: "/etc/prometheus/exporters"
+    state: directory
+    mode: '0755'
+
+- name: Create blackbox_exporter config
+  ansible.builtin.template:
+    src: "blackbox_exporter.yml.j2"
+    dest: "/etc/prometheus/exporters/blackbox.yml"
+    owner: blackbox_exporter
+    group: blackbox_exporter
+    mode: '0644'
+
+- name: Create blackbox_exporter systemd service
+  ansible.builtin.template:
+    src: "blackbox_exporter.service.j2"
+    dest: "/etc/systemd/system/blackbox_exporter.service"
+    mode: '0644'
+    owner: root
+    group: root
+
+- name: Reload systemd
+  ansible.builtin.systemd:
+    daemon_reload: yes
+
+- name: Enable and start blackbox_exporter
+  ansible.builtin.systemd:
+    name: blackbox_exporter
+    enabled: true
+    state: started

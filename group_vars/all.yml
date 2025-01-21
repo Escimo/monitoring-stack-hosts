@@ -1,0 +1,14 @@
+# group_vars/all.yml
+
+# Common versions for exporters
+node_exporter_version: "1.8.2"
+mysqld_exporter_version: "0.16.0"
+blackbox_exporter_version: "0.25.0"
+cadvisor_version: "-arm64:v0.51.0"
+
+arch: "linux-arm64"
+
+# MySQL Exporter config
+mysql_exporter_host: "YOUR_RDS_ENDPOINT"
+mysql_exporter_user: "exporter"
+mysql_exporter_password: "YOUR_PASSWORD"

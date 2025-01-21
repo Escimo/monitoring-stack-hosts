@@ -1,0 +1,36 @@
+# AWS Environment Groups
+[dev]
+dev-server ansible_host=your-dev-server-ip
+
+[stage]
+stage-server ansible_host=your-stage-server-ip
+
+[prod]
+prod-server1 ansible_host=your-prod-server-ip
+prod-server2 ansible_host=another-prod-server-ip
+prod-server3 ansible_host=yet-another-prod-server-ip
+
+# Oracle Cloud Servers
+[oracle]
+oracle-server1 ansible_host=your-server-ip
+
+# Group of all AWS servers
+[aws:children]
+dev
+stage
+prod
+
+# All environments combined
+[all:children]
+aws
+oracle
+
+# Variables for AWS hosts
+[aws:vars]
+ansible_user=ec2-user
+ansible_ssh_private_key_file=~/.ssh/your-aws-key.pem
+
+# Variables for Oracle hosts
+[oracle:vars]
+ansible_user=ubuntu
+ansible_ssh_private_key_file=~/.ssh/your-oracle-key.pem

@@ -1,0 +1,8 @@
+---
+mysqld_exporter_version: "0.16.0"
+arch: "linux-arm64"
+
+# Default MySQL connection settings
+mysql_exporter_host: "RDS_ENDPOINT"
+mysql_exporter_user: "exporter"
+mysql_exporter_password: "password"
