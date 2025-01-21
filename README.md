@@ -1,7 +1,7 @@
 # Monitoring Deployment Guide using Ansible
 
 ## Overview
-This document describes the process of deploying a monitoring system using various Prometheus exporters (Node Exporter, MySQL Exporter, Blackbox Exporter, cAdvisor) using Ansible.
+This document describes the process of deploying a containerized monitoring system using various Prometheus exporters (Node Exporter, MySQL Exporter, Blackbox Exporter, cAdvisor) using Ansible.
 
 ### Note on Architecture
 By default, all roles and configurations in this repository are tailored for ARM-based Linux systems. This ensures compatibility with a wide range of modern servers, including those running on ARM architecture. 
